@@ -13,9 +13,6 @@ USER_ID = os.getenv('USER_ID')
 API_KEY = os.getenv('API_KEY')
 PIPELINE_ID = os.getenv('PIPELINE_ID')
 
-print(USER_ID)
-print(API_KEY)
-print(PIPELINE_ID)
 # Configuration variables
 ulca_base_url = 'https://meity-auth.ulcacontrib.org'
 model_pipeline_endpoint = "https://meity-auth.ulcacontrib.org/ulca/apis/v0/model/getModelsPipeline"
