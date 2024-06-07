@@ -50,7 +50,7 @@ recordButton.addEventListener('click', async () => {
             const base64String = reader.result.split(',')[1];
     
             // Send base64 string to the server
-            processAudio(base64String, sourceLang);
+            processAudio(base64String, sourceLang, targetLang);
         };
     
         stream.getTracks().forEach(track => track.stop());
@@ -58,30 +58,16 @@ recordButton.addEventListener('click', async () => {
     }, 5000);
 });
 
-async function processAudio(base64String, sourceLang) {
+async function processAudio(base64String, sourceLang, targetLang) {
     try {
         const transcriptionData = await fetchASR(base64String, sourceLang, targetLang);
         if (transcriptionData.transcription) {
             transcription = transcriptionData.transcription;
             you.textContent = transcription;
-            const chatData = await fetch(transcription, sourceLang);
-            if (chatData.assistant) {
-                chatresponse = chatData.assistant;
-                assistant.textContent = chatresponse;
-                status.textContent = 'Chat response received.';
-                const audio = await fetchAudio(chatresponse, sourceLang);
-                if (audio.audio){
-                    const audioUrl = `data:audio/wav;base64,${audio.audio}`;
-                    audioPlayback.src = audioUrl;
-                    audioPlayback.play();
-                }
-                else{
-                    status.textContent = 'No Audio Response Received.';
-                }
-            } else {
-                status.textContent = 'No chat response received.';
-            }
-            
+            assistant.textContent = transcriptionData.translation;
+            const audioUrl = `data:audio/wav;base64,${transcriptionData.audio}`;
+            audioPlayback.src = audioUrl;
+            audioPlayback.play();           
         } else {
             status.textContent = 'No transcription received.';
         }
@@ -92,28 +78,11 @@ async function processAudio(base64String, sourceLang) {
 }
 
 async function fetchASR(base64String, sourceLang) {
-    const response = await fetch('/asr', {
+    const response = await fetch('/process_audio', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ audio: base64String, sourceLang, targetLang })
     });
-    return response.json();
-}
-
-async function fetchChat(prompt, sourceLang) {
-    const response = await fetch('/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, sourceLang })
-    });
-    return response.json();
-}
-async function fetchAudio(prompt, sourceLang){
-    const response = await fetch('/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json'},
-        body: JSON.stringify({prompt, sourceLang})
-    })
     return response.json();
 }
 

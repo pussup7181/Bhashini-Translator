@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Assistant</title>
+    <title>NCRTC Audio Translator</title>
 </head>
 <body>
-    <h1>AI Assistant</h1>
+    <h1>NCRTC Audio Translator</h1>
     <label for="sourceLang">Select Language:</label>
     <select id="sourceLang">
         <option value="en">English</option>
@@ -24,10 +24,14 @@
         <option value="kn">Kannada</option>
     </select><br>
     <button id="recordButton">Record Audio</button>
+    
     <p id="status"></p>
+    <p>User Audio Transcription</p>
+    <p id="you"></p>
+    <p>Translation</p>
+    <p id="assistant"></p>
     <audio id="audioPlayback" controls></audio>
-    <p id="you">You</p>
-    <p id="assistant">Assistant</p>
+    
 
     <!-- Link to the external JavaScript files -->
     <script src="{{ url_for('static', filename='script.js') }}"></script>
