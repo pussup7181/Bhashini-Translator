@@ -4,7 +4,6 @@ import base64
 from pydub import AudioSegment
 from io import BytesIO
 import os
-from openai import OpenAI
 
 app = Flask(__name__)
 
