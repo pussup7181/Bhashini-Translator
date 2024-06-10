@@ -4,36 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NCRTC Audio Translator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        #recordButton {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background-color: blue;
+            color: white;
+            transition: background-color 0.3s ease;
+            margin: 0 auto;
+        }
+        #recordButton.recording {
+            background-color: red;
+        }
+    </style>
 </head>
 <body>
-    <h1>NCRTC Audio Translator</h1>
-    <label for="sourceLang">Select Language:</label>
-    <select id="sourceLang">
-        <option value="en">English</option>
-        <option value="hi">Hindi</option>
-        <option value="ta">Tamil</option>
-        <option value="te">Telugu</option>
-        <option value="kn">Kannada</option>
-    </select><br>
-    <label for="targetLang">Target Language:</label>
-    <select id="targetLang">
-        <option value="en">English</option>
-        <option value="hi">Hindi</option>
-        <option value="ta">Tamil</option>
-        <option value="te">Telugu</option>
-        <option value="kn">Kannada</option>
-    </select><br>
-    <button id="recordButton">Record Audio</button>
-    
-    <p id="status"></p>
-    <p>User Audio Transcription</p>
-    <p id="you"></p>
-    <p>Translation</p>
-    <p id="assistant"></p>
-    <audio id="audioPlayback" controls></audio>
-    
+    <div class="container mt-5">
+        <h1 class="text-center">NCRTC Audio Translator</h1>
+        <div class="form-group">
+            <label for="sourceLang">Select Source Language:</label>
+            <select class="form-control" id="sourceLang">
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+                <option value="ta">Tamil</option>
+                <option value="te">Telugu</option>
+                <option value="kn">Kannada</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="targetLang">Select Target Language:</label>
+            <select class="form-control" id="targetLang">
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+                <option value="ta">Tamil</option>
+                <option value="te">Telugu</option>
+                <option value="kn">Kannada</option>
+            </select>
+        </div>
+        
+        
+        <div class="mt-4">
+            
+            <h4>Audio Transcription</h4>
+            <p id="you"></p>
+            <h4>Audio Translation</h4>
+            <p id="assistant"></p>
+            <audio id="audioPlayback" controls class="w-100"></audio>
+            <br><br><p id="status"></p>
+        </div>
+        <div class="form-group">
+            <label for="recordingTime">Set Recording Time (seconds):</label>
+            <input type="number" class="form-control" id="recordingTime" value="5" min="1">
+        </div>
+        <div class="text-center">
+            <button id="recordButton" class="btn">
+                <i class="fas fa-microphone"></i>
+            </button>
+        </div>
+    </div>
 
-    <!-- Link to the external JavaScript files -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

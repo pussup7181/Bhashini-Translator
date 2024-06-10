@@ -3,6 +3,8 @@ const status = document.getElementById('status');
 const audioPlayback = document.getElementById('audioPlayback');
 const you = document.getElementById('you');
 const assistant = document.getElementById('assistant');
+const recordingTimeInput = document.getElementById('recordingTime');
+
 let transcription = null;
 let chatresponse = null;
 let sourceLang = null;
@@ -11,6 +13,8 @@ let targetLang = null;
 recordButton.addEventListener('click', async () => {
     sourceLang = document.getElementById('sourceLang').value;
     targetLang = document.getElementById('targetLang').value;
+    const recordingTime = parseInt(recordingTimeInput.value, 10) * 1000;
+
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         alert('Your browser does not support audio recording.');
         return;
@@ -23,6 +27,7 @@ recordButton.addEventListener('click', async () => {
 
     let audioData = [];
     status.textContent = 'Recording...';
+    recordButton.classList.add('recording'); // Change button color to red
     recorder.onaudioprocess = event => {
         const channelData = event.inputBuffer.getChannelData(0);
         const buffer = new Int16Array(channelData.length);
@@ -38,7 +43,8 @@ recordButton.addEventListener('click', async () => {
     setTimeout(() => {
         recorder.disconnect();
         source.disconnect();
-    
+        recordButton.classList.remove('recording'); // Change button color back to default
+
         const wavBuffer = createWavFile(audioData, audioContext.sampleRate);
         const wavBlob = new Blob([wavBuffer], { type: 'audio/wav' });
         const audioUrl = URL.createObjectURL(wavBlob);
@@ -55,7 +61,7 @@ recordButton.addEventListener('click', async () => {
     
         stream.getTracks().forEach(track => track.stop());
         status.textContent = 'Recording stopped.';
-    }, 5000);
+    }, recordingTime);
 });
 
 async function processAudio(base64String, sourceLang, targetLang) {
@@ -77,7 +83,7 @@ async function processAudio(base64String, sourceLang, targetLang) {
     }
 }
 
-async function fetchASR(base64String, sourceLang) {
+async function fetchASR(base64String, sourceLang, targetLang) {
     const response = await fetch('/process_audio', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
